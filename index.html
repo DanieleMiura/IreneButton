@@ -2,43 +2,31 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Bottone Giornaliero</title>
   <style>
-    body {
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100svh;
+      width: 100vw;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100svh;
-      margin: 0;
-      background-color: #f4f4f4;
       font-family: sans-serif;
-    }
-
-    button {
-      padding: 20px 40px;
-      font-size: 20px;
-      background-color: green;
+      font-size: 24px;
       color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
       transition: background-color 0.3s ease;
-      max-width: 90vw;
-      width: 100%;
-    }
-
-    button:disabled {
-      background-color: red;
-      cursor: not-allowed;
     }
   </style>
 </head>
 <body>
-  <button id="dailyBtn">Da prendere</button>
+  <div id="label">Da prendere</div>
 
   <script>
-    const btn = document.getElementById('dailyBtn');
+    const label = document.getElementById('label');
 
     function getItalianDate() {
       return new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Rome" }));
@@ -48,23 +36,23 @@
       const storedDate = localStorage.getItem('buttonDate');
       const today = getItalianDate().toDateString();
       if (storedDate !== today) {
-        btn.disabled = false;
-        btn.style.backgroundColor = 'green';
-        btn.textContent = 'Da prendere';
+        document.body.style.backgroundColor = 'green';
+        label.textContent = 'Da prendere';
         localStorage.removeItem('buttonDate');
       } else {
-        btn.disabled = true;
-        btn.style.backgroundColor = 'red';
-        btn.textContent = 'Presa';
+        document.body.style.backgroundColor = 'red';
+        label.textContent = 'Presa';
       }
     }
 
-    btn.addEventListener('click', () => {
-      btn.disabled = true;
-      btn.style.backgroundColor = 'red';
-      btn.textContent = 'Presa';
+    document.body.addEventListener('click', () => {
+      const storedDate = localStorage.getItem('buttonDate');
       const today = getItalianDate().toDateString();
-      localStorage.setItem('buttonDate', today);
+      if (storedDate !== today) {
+        document.body.style.backgroundColor = 'red';
+        label.textContent = 'Presa';
+        localStorage.setItem('buttonDate', today);
+      }
     });
 
     checkReset();
